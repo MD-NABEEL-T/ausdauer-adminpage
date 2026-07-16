@@ -12,12 +12,10 @@ const emptyForm = {
 export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
   const [form, setForm] = useState(emptyForm);
 
-  // Reset the form whenever the modal is (re)opened
   useEffect(() => {
     if (isOpen) setForm(emptyForm);
   }, [isOpen]);
 
-  // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
     const handleKey = (e) => e.key === "Escape" && onClose();
@@ -56,18 +54,19 @@ export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
         onClick={(e) => e.stopPropagation()}
         className="
           w-full max-w-md rounded-2xl border border-neutral-800 bg-[#111111]
+          light:border-neutral-200 light:bg-white light:shadow-xl
           p-6 shadow-2xl
         "
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 id="add-registration-title" className="text-base font-medium text-neutral-100">
+          <h2 id="add-registration-title" className="text-base font-medium text-neutral-100 light:text-neutral-900">
             Add registration
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-neutral-500 hover:text-neutral-200 transition-colors duration-200"
+            className="text-neutral-500 hover:text-neutral-200 light:hover:text-neutral-700 transition-colors duration-200"
           >
             <X size={18} strokeWidth={1.75} />
           </button>
@@ -87,9 +86,11 @@ export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
                 placeholder={placeholder}
                 className="
                   w-full h-10 rounded-xl border border-neutral-800 bg-[#0c0c0c]
-                  px-3.5 text-sm text-neutral-100 placeholder:text-neutral-600
+                  light:border-neutral-200 light:bg-neutral-50
+                  px-3.5 text-sm text-neutral-100 light:text-neutral-900
+                  placeholder:text-neutral-600 light:placeholder:text-neutral-400
                   outline-none transition-colors duration-200
-                  focus:border-neutral-600
+                  focus:border-neutral-600 light:focus:border-neutral-400
                 "
               />
             </div>
@@ -103,9 +104,10 @@ export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
           className="
             mt-6 w-full h-11 rounded-full text-sm font-medium
             bg-neutral-100 text-neutral-900
+            light:bg-neutral-900 light:text-white
             transition-all duration-200
-            hover:bg-white
-            disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-neutral-100
+            hover:bg-white light:hover:bg-neutral-800
+            disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-neutral-100 light:disabled:hover:bg-neutral-900
           "
         >
           Save registration

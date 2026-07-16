@@ -9,18 +9,19 @@ import UserCard from "../components/UserCard";
 import AddRegistrationModal from "../components/AddRegistrationModal";
 import AttendanceDrawer from "../components/AttendanceDrawer";
 import StarField from "../components/StarField";
+import GridBackground from "../components/GridBackground";
 
 import seedUsers from "../data/users";
 
 function UserCardSkeleton() {
     return (
-        <div className="flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md px-4.5 py-3.5 animate-pulse">
-            <div className="w-10 h-10 rounded-full bg-neutral-800 shrink-0" />
+        <div className="flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.03] light:border-neutral-200 light:bg-neutral-50 backdrop-blur-md px-4.5 py-3.5 animate-pulse">
+            <div className="w-10 h-10 rounded-full bg-neutral-800 light:bg-neutral-200 shrink-0" />
             <div className="flex-1 space-y-2">
-                <div className="h-3.5 w-32 rounded bg-neutral-800" />
-                <div className="h-3 w-24 rounded bg-neutral-800" />
+                <div className="h-3.5 w-32 rounded bg-neutral-800 light:bg-neutral-200" />
+                <div className="h-3 w-24 rounded bg-neutral-800 light:bg-neutral-200" />
             </div>
-            <div className="h-6 w-16 rounded-full bg-neutral-800 shrink-0" />
+            <div className="h-6 w-16 rounded-full bg-neutral-800 light:bg-neutral-200 shrink-0" />
         </div>
     );
 }
@@ -47,7 +48,7 @@ export default function Dashboard() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Page entrance animation — header, search bar, then stats stagger in
+    // Page entrance animation
     useEffect(() => {
         const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
         tl.fromTo(headerRef.current, { y: -16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
@@ -60,7 +61,7 @@ export default function Dashboard() {
             );
     }, []);
 
-    // Stagger the user cards in whenever the visible list changes (load, filter, add)
+    // Stagger the user cards in whenever the visible list changes
     useEffect(() => {
         if (isLoading || !listRef.current) return;
         const cards = listRef.current.querySelectorAll("[data-usercard]");
@@ -124,8 +125,9 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="relative min-h-screen bg-[#080808] px-6 md:px-10 py-10 overflow-hidden">
+        <div className="relative min-h-screen bg-[#080808] light:bg-white px-6 md:px-10 py-10 overflow-hidden transition-colors duration-300">
             <StarField />
+            <GridBackground />
 
             <div className="relative z-10 max-w-4xl mx-auto">
                 <div ref={headerRef}>
@@ -142,7 +144,8 @@ export default function Dashboard() {
                         className="
                             flex-1 h-11 rounded-full text-sm font-medium
                             bg-neutral-100 text-neutral-900
-                            transition-all duration-200 hover:bg-white hover:scale-[1.02]
+                            light:bg-neutral-900 light:text-white
+                            transition-all duration-200 hover:bg-white light:hover:bg-neutral-800 hover:scale-[1.02]
                             active:scale-[0.98]
                         "
                     >
@@ -205,12 +208,12 @@ export default function Dashboard() {
 
 function EmptyState({ icon, title, body }) {
     return (
-        <div className="flex flex-col items-center text-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md py-16 px-6">
-            <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-500">
+        <div className="flex flex-col items-center text-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] light:border-neutral-200 light:bg-white backdrop-blur-md py-16 px-6">
+            <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 light:bg-neutral-100 light:border-neutral-200 flex items-center justify-center text-neutral-500 light:text-neutral-400">
                 {icon}
             </div>
             <div>
-                <p className="text-sm font-medium text-neutral-200">{title}</p>
+                <p className="text-sm font-medium text-neutral-200 light:text-neutral-900">{title}</p>
                 <p className="text-xs text-neutral-500 mt-1 max-w-xs">{body}</p>
             </div>
         </div>

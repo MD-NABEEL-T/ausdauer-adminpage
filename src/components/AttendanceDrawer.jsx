@@ -13,7 +13,6 @@ function getInitials(name = "") {
 export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
   const [status, setStatus] = useState(user?.status ?? "Present");
 
-  // Sync local selection whenever a different user is opened
   useEffect(() => {
     if (user) setStatus(user.status);
   }, [user]);
@@ -52,6 +51,7 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
         className={`
           fixed top-0 right-0 z-50 h-full w-full max-w-sm
           bg-[#111111] border-l border-neutral-800
+          light:bg-white light:border-neutral-200 light:shadow-2xl
           transition-transform duration-300 ease-out
           ${isOpen ? "translate-x-0" : "translate-x-full"}
           flex flex-col
@@ -59,13 +59,13 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
       >
         {user && (
           <>
-            <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-neutral-800">
-              <h2 className="text-sm font-medium text-neutral-100">Attendance</h2>
+            <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-neutral-800 light:border-neutral-200">
+              <h2 className="text-sm font-medium text-neutral-100 light:text-neutral-900">Attendance</h2>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="text-neutral-500 hover:text-neutral-200 transition-colors duration-200"
+                className="text-neutral-500 hover:text-neutral-200 light:hover:text-neutral-700 transition-colors duration-200"
               >
                 <X size={18} strokeWidth={1.75} />
               </button>
@@ -74,11 +74,11 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
             <div className="px-6 py-6 flex-1 overflow-y-auto">
               {/* User identity */}
               <div className="flex items-center gap-3.5 mb-6">
-                <div className="w-12 h-12 rounded-full bg-[#1B1B1B] border border-neutral-800 flex items-center justify-center text-sm font-medium text-neutral-300">
+                <div className="w-12 h-12 rounded-full bg-[#1B1B1B] border border-neutral-800 light:bg-neutral-100 light:border-neutral-200 flex items-center justify-center text-sm font-medium text-neutral-300 light:text-neutral-600">
                   {getInitials(user.name)}
                 </div>
                 <div>
-                  <p id="drawer-user-name" className="text-sm font-medium text-neutral-100">
+                  <p id="drawer-user-name" className="text-sm font-medium text-neutral-100 light:text-neutral-900">
                     {user.name}
                   </p>
                   <p className="text-xs text-neutral-500 mt-0.5">
@@ -88,16 +88,16 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
               </div>
 
               {/* Contact details */}
-              <div className="space-y-2.5 mb-7 pb-7 border-b border-neutral-800">
+              <div className="space-y-2.5 mb-7 pb-7 border-b border-neutral-800 light:border-neutral-200">
                 {user.email && (
-                  <div className="flex items-center gap-2.5 text-sm text-neutral-400">
-                    <Mail size={15} className="text-neutral-600 shrink-0" strokeWidth={1.75} />
+                  <div className="flex items-center gap-2.5 text-sm text-neutral-400 light:text-neutral-600">
+                    <Mail size={15} className="text-neutral-600 light:text-neutral-400 shrink-0" strokeWidth={1.75} />
                     <span className="truncate">{user.email}</span>
                   </div>
                 )}
                 {user.phone && (
-                  <div className="flex items-center gap-2.5 text-sm text-neutral-400">
-                    <Phone size={15} className="text-neutral-600 shrink-0" strokeWidth={1.75} />
+                  <div className="flex items-center gap-2.5 text-sm text-neutral-400 light:text-neutral-600">
+                    <Phone size={15} className="text-neutral-600 light:text-neutral-400 shrink-0" strokeWidth={1.75} />
                     <span>{user.phone}</span>
                   </div>
                 )}
@@ -113,8 +113,8 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
                     h-11 rounded-xl text-sm font-medium border transition-all duration-200
                     ${
                       status === "Present"
-                        ? "bg-[#0F1E19] border-[#1D3A31] text-[#9FE1CB]"
-                        : "bg-transparent border-neutral-800 text-neutral-500 hover:border-neutral-700"
+                        ? "bg-[#0F1E19] border-[#1D3A31] text-[#9FE1CB] light:bg-emerald-50 light:border-emerald-200 light:text-emerald-700"
+                        : "bg-transparent border-neutral-800 text-neutral-500 hover:border-neutral-700 light:border-neutral-200 light:hover:border-neutral-300"
                     }
                   `}
                 >
@@ -127,8 +127,8 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
                     h-11 rounded-xl text-sm font-medium border transition-all duration-200
                     ${
                       status === "Absent"
-                        ? "bg-[#211511] border-[#3A2318] text-[#F0997B]"
-                        : "bg-transparent border-neutral-800 text-neutral-500 hover:border-neutral-700"
+                        ? "bg-[#211511] border-[#3A2318] text-[#F0997B] light:bg-orange-50 light:border-orange-200 light:text-orange-700"
+                        : "bg-transparent border-neutral-800 text-neutral-500 hover:border-neutral-700 light:border-neutral-200 light:hover:border-neutral-300"
                     }
                   `}
                 >
@@ -138,7 +138,7 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-5 border-t border-neutral-800">
+            <div className="px-6 py-5 border-t border-neutral-800 light:border-neutral-200">
               <button
                 type="button"
                 onClick={handleSave}
@@ -146,9 +146,10 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
                 className="
                   w-full h-11 rounded-full text-sm font-medium
                   bg-neutral-100 text-neutral-900
+                  light:bg-neutral-900 light:text-white
                   transition-all duration-200
-                  hover:bg-white
-                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-neutral-100
+                  hover:bg-white light:hover:bg-neutral-800
+                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-neutral-100 light:disabled:hover:bg-neutral-900
                 "
               >
                 Save changes

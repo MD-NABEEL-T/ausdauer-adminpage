@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 
-// Twinkling star/dot background — mirrors the subtle scattered-dot look
-// used across ausdauergroups.in
 export default function StarField({ density = 90 }) {
   const canvasRef = useRef(null);
 
@@ -14,7 +12,7 @@ export default function StarField({ density = 90 }) {
     const palette = [
       "rgba(255,255,255,0.9)",
       "rgba(255,255,255,0.5)",
-      "rgba(255,214,140,0.8)", // warm accent dot, matches their yellow specks
+      "rgba(255,214,140,0.8)",
     ];
 
     function resize() {
@@ -31,7 +29,7 @@ export default function StarField({ density = 90 }) {
         color: palette[Math.floor(Math.random() * palette.length)],
         phase: Math.random() * Math.PI * 2,
         speed: Math.random() * 0.015 + 0.005,
-        glow: Math.random() > 0.85, // a handful get a soft glow, like the bright one on their hero
+        glow: Math.random() > 0.85,
       }));
     }
 
@@ -70,7 +68,11 @@ export default function StarField({ density = 90 }) {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none opacity-60"
+      className="
+        fixed inset-0 z-0 pointer-events-none opacity-60
+        light:opacity-0
+        transition-opacity duration-300
+      "
       aria-hidden="true"
     />
   );

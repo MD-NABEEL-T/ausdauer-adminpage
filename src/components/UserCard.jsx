@@ -10,8 +10,10 @@ function getInitials(name = "") {
 }
 
 const statusStyles = {
-  Present: "text-[#9FE1CB] bg-[#0F1E19]/70 border-[#1D3A31]",
-  Absent: "text-[#F0997B] bg-[#211511]/70 border-[#3A2318]",
+  Present:
+    "text-[#9FE1CB] bg-[#0F1E19]/70 border-[#1D3A31] light:text-emerald-700 light:bg-emerald-50 light:border-emerald-200",
+  Absent:
+    "text-[#F0997B] bg-[#211511]/70 border-[#3A2318] light:text-orange-700 light:bg-orange-50 light:border-orange-200",
 };
 
 export default function UserCard({ user, onClick }) {
@@ -24,9 +26,11 @@ export default function UserCard({ user, onClick }) {
       className="
         w-full flex items-center gap-3.5
         rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md
+        light:border-neutral-200 light:bg-white light:shadow-sm
         px-4 py-2.5 text-left
         transition-all duration-200
         hover:border-white/20 hover:bg-white/[0.06] hover:-translate-y-0.5
+        light:hover:border-neutral-300 light:hover:bg-neutral-50
         focus:outline-none focus-visible:border-neutral-600
       "
     >
@@ -35,8 +39,9 @@ export default function UserCard({ user, onClick }) {
         className="
           shrink-0 w-9 h-9 rounded-full
           bg-white/5 border border-white/10
+          light:bg-neutral-100 light:border-neutral-200
           flex items-center justify-center
-          text-[13px] font-medium text-neutral-300
+          text-[13px] font-medium text-neutral-300 light:text-neutral-600
         "
       >
         {getInitials(name)}
@@ -44,7 +49,7 @@ export default function UserCard({ user, onClick }) {
 
       {/* Name + meta */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-neutral-100 truncate">{name}</p>
+        <p className="text-sm font-medium text-neutral-100 light:text-neutral-900 truncate">{name}</p>
         <p className="text-xs text-neutral-500 mt-0.5 truncate">
           {employeeId} &middot; {department}
         </p>
@@ -61,7 +66,7 @@ export default function UserCard({ user, onClick }) {
       </span>
 
       {/* Chevron */}
-      <ChevronRight size={16} className="shrink-0 text-neutral-600" strokeWidth={1.75} />
+      <ChevronRight size={16} className="shrink-0 text-neutral-600 light:text-neutral-400" strokeWidth={1.75} />
     </button>
   );
 }
