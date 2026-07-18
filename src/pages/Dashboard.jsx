@@ -11,7 +11,7 @@ import AttendanceDrawer from "../components/AttendanceDrawer";
 import StarField from "../components/StarField";
 import GridBackground from "../components/GridBackground";
 
-import seedUsers from "../data/users";
+import seedUsers from "../data/users.real";
 
 function UserCardSkeleton() {
     return (
@@ -78,20 +78,23 @@ export default function Dashboard() {
         return users.filter(
             (u) =>
                 u.name.toLowerCase().includes(query) ||
-                u.employeeId.toLowerCase().includes(query) ||
-                u.department.toLowerCase().includes(query)
+                (u.bookingId ?? "").toLowerCase().includes(query) ||
+                (u.companyName ?? "").toLowerCase().includes(query) ||
+                (u.collegeName ?? "").toLowerCase().includes(query)
         );
     }, [users, searchQuery]);
 
-    const stats = useMemo(
-        () => ({
+    const stats = useMemo(() => {
+        const today = new Date().toDateString();
+        return {
             registered: users.length,
             present: users.filter((u) => u.status === "Present").length,
             absent: users.filter((u) => u.status === "Absent").length,
-            newToday: users.filter((u) => u.isNewToday).length,
-        }),
-        [users]
-    );
+            newToday: users.filter(
+                (u) => u.registeredAt && new Date(u.registeredAt).toDateString() === today
+            ).length,
+        };
+    }, [users]);
 
     const handleSelectUser = (user) => {
         setSelectedUser(user);
@@ -103,22 +106,25 @@ export default function Dashboard() {
         setTimeout(() => setSelectedUser(null), 300);
     };
 
-    const handleSaveAttendance = (employeeId, status) => {
+    const handleSaveAttendance = (bookingId, status) => {
         setUsers((prev) =>
-            prev.map((u) => (u.employeeId === employeeId ? { ...u, status } : u))
+            prev.map((u) => (u.bookingId === bookingId ? { ...u, status } : u))
         );
         handleCloseDrawer();
     };
 
     const handleAddRegistration = (form) => {
         const newUser = {
-            employeeId: form.employeeId,
+            bookingId: `WALKIN_${Date.now()}`,
             name: form.name,
-            department: form.department,
+            companyName: form.companyName || null,
+            collegeName: form.collegeName || null,
+            age: form.age ? Number(form.age) : null,
+            comingFrom: form.comingFrom || null,
             email: form.email,
             phone: form.phone,
             status: "Absent",
-            isNewToday: true,
+            registeredAt: new Date().toISOString(),
         };
         setUsers((prev) => [newUser, ...prev]);
         setIsAddModalOpen(false);
@@ -170,11 +176,11 @@ export default function Dashboard() {
                         <EmptyState
                             icon={<SearchX size={22} strokeWidth={1.5} />}
                             title="No matches found"
-                            body={`Nothing matches "${searchQuery}". Try a different name, ID, or department.`}
+                            body={`Nothing matches "${searchQuery}". Try a different name, booking ID, company, or college.`}
                         />
                     ) : (
                         filteredUsers.map((user) => (
-                            <div key={user.employeeId} data-usercard>
+                            <div key={user.bookingId ?? user.email} data-usercard>
                                 <UserCard user={user} onClick={handleSelectUser} />
                             </div>
                         ))

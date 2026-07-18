@@ -16,8 +16,16 @@ const statusStyles = {
     "text-[#F0997B] bg-[#211511]/70 border-[#3A2318] light:text-orange-700 light:bg-orange-50 light:border-orange-200",
 };
 
+const highlightDotColors = {
+  green: "#22c55e",
+  orange: "#f59e0b",
+  yellow: "#eab308",
+};
+
 export default function UserCard({ user, onClick }) {
-  const { name, employeeId, department, status } = user;
+  const { name, bookingId, companyName, collegeName, status, sheetHighlight } = user;
+  const org = companyName || collegeName || "—";
+  const dotColor = highlightDotColors[sheetHighlight];
 
   return (
     <button
@@ -35,23 +43,32 @@ export default function UserCard({ user, onClick }) {
       "
     >
       {/* Avatar */}
-      <div
-        className="
-          shrink-0 w-9 h-9 rounded-full
-          bg-white/5 border border-white/10
-          light:bg-neutral-100 light:border-neutral-200
-          flex items-center justify-center
-          text-[13px] font-medium text-neutral-300 light:text-neutral-600
-        "
-      >
-        {getInitials(name)}
+      <div className="relative shrink-0">
+        <div
+          className="
+            w-9 h-9 rounded-full
+            bg-white/5 border border-white/10
+            light:bg-neutral-100 light:border-neutral-200
+            flex items-center justify-center
+            text-[13px] font-medium text-neutral-300 light:text-neutral-600
+          "
+        >
+          {getInitials(name)}
+        </div>
+        {dotColor && (
+          <span
+            title={`Sheet color: ${sheetHighlight} (meaning unconfirmed)`}
+            className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-[#111111] light:border-white"
+            style={{ backgroundColor: dotColor }}
+          />
+        )}
       </div>
 
       {/* Name + meta */}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-neutral-100 light:text-neutral-900 truncate">{name}</p>
         <p className="text-xs text-neutral-500 mt-0.5 truncate">
-          {employeeId} &middot; {department}
+          {bookingId ?? "No booking ID"} &middot; {org}
         </p>
       </div>
 

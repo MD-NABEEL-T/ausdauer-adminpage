@@ -3,8 +3,10 @@ import { X } from "lucide-react";
 
 const emptyForm = {
   name: "",
-  employeeId: "",
-  department: "",
+  companyName: "",
+  collegeName: "",
+  age: "",
+  comingFrom: "",
   email: "",
   phone: "",
 };
@@ -27,7 +29,7 @@ export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
 
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const isValid = form.name.trim() && form.employeeId.trim() && form.department.trim();
+  const isValid = form.name.trim() && (form.companyName.trim() || form.collegeName.trim());
 
   const handleSave = () => {
     if (!isValid) return;
@@ -36,8 +38,10 @@ export default function AddRegistrationModal({ isOpen, onClose, onSave }) {
 
   const fields = [
     { key: "name", label: "Full name", placeholder: "Priya Sharma" },
-    { key: "employeeId", label: "Employee ID", placeholder: "EMP-1045" },
-    { key: "department", label: "Department", placeholder: "Engineering" },
+    { key: "companyName", label: "Company (if any)", placeholder: "Upzeal" },
+    { key: "collegeName", label: "College (if any)", placeholder: "CMRIT Bangalore" },
+    { key: "age", label: "Age", placeholder: "21", type: "number" },
+    { key: "comingFrom", label: "Coming from", placeholder: "Chennai" },
     { key: "email", label: "Email", placeholder: "priya.sharma@company.com", type: "email" },
     { key: "phone", label: "Phone", placeholder: "+91 98765 43210", type: "tel" },
   ];

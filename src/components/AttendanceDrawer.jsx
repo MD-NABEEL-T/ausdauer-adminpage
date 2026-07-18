@@ -10,6 +10,23 @@ function getInitials(name = "") {
     .join("");
 }
 
+const highlightDotColors = {
+  green: "#22c55e",
+  orange: "#f59e0b",
+  yellow: "#eab308",
+};
+
+function DetailField({ label, value, mono = false }) {
+  return (
+    <div>
+      <p className="text-[11px] text-neutral-500">{label}</p>
+      <p className={`text-sm text-neutral-200 light:text-neutral-800 mt-0.5 ${mono ? "font-mono text-xs" : ""}`}>
+        {value}
+      </p>
+    </div>
+  );
+}
+
 export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
   const [status, setStatus] = useState(user?.status ?? "Present");
 
@@ -28,7 +45,7 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
 
   const handleSave = () => {
     if (!user) return;
-    onSave(user.employeeId, status);
+    onSave(user.bookingId, status);
   };
 
   return (
@@ -74,17 +91,48 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
             <div className="px-6 py-6 flex-1 overflow-y-auto">
               {/* User identity */}
               <div className="flex items-center gap-3.5 mb-6">
-                <div className="w-12 h-12 rounded-full bg-[#1B1B1B] border border-neutral-800 light:bg-neutral-100 light:border-neutral-200 flex items-center justify-center text-sm font-medium text-neutral-300 light:text-neutral-600">
-                  {getInitials(user.name)}
+                <div className="relative shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-[#1B1B1B] border border-neutral-800 light:bg-neutral-100 light:border-neutral-200 flex items-center justify-center text-sm font-medium text-neutral-300 light:text-neutral-600">
+                    {getInitials(user.name)}
+                  </div>
+                  {highlightDotColors[user.sheetHighlight] && (
+                    <span
+                      title={`Sheet color: ${user.sheetHighlight} (meaning unconfirmed)`}
+                      className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#111111] light:border-white"
+                      style={{ backgroundColor: highlightDotColors[user.sheetHighlight] }}
+                    />
+                  )}
                 </div>
                 <div>
                   <p id="drawer-user-name" className="text-sm font-medium text-neutral-100 light:text-neutral-900">
                     {user.name}
                   </p>
                   <p className="text-xs text-neutral-500 mt-0.5">
-                    {user.employeeId} &middot; {user.department}
+                    {user.bookingId ?? "No booking ID"} &middot; {user.companyName || user.collegeName || "—"}
                   </p>
                 </div>
+              </div>
+
+              {/* Registration details */}
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-7 pb-7 border-b border-neutral-800 light:border-neutral-200">
+                {user.age != null && (
+                  <DetailField label="Age" value={user.age} />
+                )}
+                {user.comingFrom && (
+                  <DetailField label="Coming from" value={user.comingFrom} />
+                )}
+                {user.companyName && user.collegeName && (
+                  <DetailField label="College" value={user.collegeName} />
+                )}
+                {user.startupStatus && (
+                  <DetailField label="Startup status" value={user.startupStatus} />
+                )}
+                {user.quantity != null && (
+                  <DetailField label="Tickets" value={user.quantity} />
+                )}
+                {user.stage && (
+                  <DetailField label="Stage" value={user.stage} mono />
+                )}
               </div>
 
               {/* Contact details */}
