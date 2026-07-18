@@ -30,6 +30,7 @@ export default function Dashboard() {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
     const [selectedUser, setSelectedUser] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -70,19 +71,22 @@ export default function Dashboard() {
             { y: 10, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.35, stagger: 0.04, ease: "power2.out" }
         );
-    }, [isLoading, searchQuery, users]);
+    }, [isLoading, searchQuery, statusFilter, users]);
 
     const filteredUsers = useMemo(() => {
         const query = searchQuery.trim().toLowerCase();
-        if (!query) return users;
-        return users.filter(
-            (u) =>
-                u.name.toLowerCase().includes(query) ||
-                (u.bookingId ?? "").toLowerCase().includes(query) ||
-                (u.companyName ?? "").toLowerCase().includes(query) ||
-                (u.collegeName ?? "").toLowerCase().includes(query)
-        );
-    }, [users, searchQuery]);
+        return users
+            .filter((u) => statusFilter === "All" || u.status === statusFilter)
+            .filter((u) => {
+                if (!query) return true;
+                return (
+                    u.name.toLowerCase().includes(query) ||
+                    (u.bookingId ?? "").toLowerCase().includes(query) ||
+                    (u.companyName ?? "").toLowerCase().includes(query) ||
+                    (u.collegeName ?? "").toLowerCase().includes(query)
+                );
+            });
+    }, [users, searchQuery, statusFilter]);
 
     const stats = useMemo(() => {
         const today = new Date().toDateString();
@@ -140,7 +144,7 @@ export default function Dashboard() {
                     <Header />
                 </div>
 
-                <div ref={actionRef} className="flex flex-col sm:flex-row gap-3 mb-6">
+                <div ref={actionRef} className="flex flex-col sm:flex-row gap-3 mb-4">
                     <div className="sm:w-[70%]">
                         <SearchBar value={searchQuery} onChange={setSearchQuery} />
                     </div>
@@ -157,6 +161,27 @@ export default function Dashboard() {
                     >
                         Add registration
                     </button>
+                </div>
+
+                {/* Status filter */}
+                <div className="flex items-center gap-1.5 mb-6">
+                    {["All", "Present", "Absent"].map((option) => (
+                        <button
+                            key={option}
+                            type="button"
+                            onClick={() => setStatusFilter(option)}
+                            className={`
+                                h-8 px-3.5 rounded-full text-xs font-medium border transition-all duration-200
+                                ${
+                                    statusFilter === option
+                                        ? "bg-white/10 border-white/20 text-neutral-100 light:bg-neutral-900 light:border-neutral-900 light:text-white"
+                                        : "bg-transparent border-white/10 text-neutral-500 hover:border-white/20 hover:text-neutral-300 light:border-neutral-200 light:hover:border-neutral-300 light:hover:text-neutral-700"
+                                }
+                            `}
+                        >
+                            {option}
+                        </button>
+                    ))}
                 </div>
 
                 {/* User list */}
@@ -176,7 +201,11 @@ export default function Dashboard() {
                         <EmptyState
                             icon={<SearchX size={22} strokeWidth={1.5} />}
                             title="No matches found"
-                            body={`Nothing matches "${searchQuery}". Try a different name, booking ID, company, or college.`}
+                            body={
+                                searchQuery
+                                    ? `Nothing matches "${searchQuery}"${statusFilter !== "All" ? ` in ${statusFilter}` : ""}. Try a different name, booking ID, company, or college.`
+                                    : `No one is marked ${statusFilter} yet.`
+                            }
                         />
                     ) : (
                         filteredUsers.map((user) => (

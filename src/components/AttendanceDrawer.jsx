@@ -108,8 +108,19 @@ export default function AttendanceDrawer({ user, isOpen, onClose, onSave }) {
                     {user.name}
                   </p>
                   <p className="text-xs text-neutral-500 mt-0.5">
-                    {user.bookingId ?? "No booking ID"} &middot; {user.companyName || user.collegeName || "—"}
+                    {user.bookingId ?? "No booking ID"}
                   </p>
+                  <span
+                    className="
+                      inline-block mt-1.5 text-xs font-medium
+                      text-neutral-200 light:text-neutral-800
+                      bg-white/[0.06] light:bg-neutral-100
+                      border border-white/10 light:border-neutral-200
+                      rounded-full px-2.5 py-0.5
+                    "
+                  >
+                    {user.companyName || user.collegeName || "—"}
+                  </span>
                 </div>
               </div>
 
